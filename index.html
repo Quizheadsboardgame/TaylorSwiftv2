@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Taylor Swift Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f2d8e6;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 5px solid #f2d8e6;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .qa-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer {
+            font-size: 1.2em;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="quizImage" src="https://i.imgur.com/ioPzU6j.png" alt="Taylor Swift Quiz Image">
+        <div class="qa-box">
+            <div id="question" class="question">Click the image to get a question!</div>
+            <div id="answer" class="answer"></div>
+        </div>
+    </div>
+    
+    <script>
+        const questionsAndAnswers = [
+            { question: "What is Taylor Swift's middle name?", answer: "Alison" },
+            { question: "In what year was Taylor Swift born?", answer: "1989" },
+            { question: "What was Taylor Swift's debut single?", answer: "'Tim McGraw'" },
+            { question: "Which album did Taylor Swift release in 2006?", answer: "Her self-titled debut album, 'Taylor Swift'" },
+            { question: "Which Taylor Swift album features the song 'Love Story'?", answer: "'Fearless'" },
+            { question: "What song earned Taylor Swift her first Grammy Award for Best Female Country Vocal Performance?", answer: "'White Horse'" },
+            { question: "Which city was Taylor Swift born in?", answer: "Reading, Pennsylvania" },
+            { question: "Who directed Taylor Swift's music video for 'The Man'?", answer: "Taylor Swift herself" },
+            { question: "What is the name of Taylor Swift's fourth studio album?", answer: "'Red'" },
+            { question: "Which Taylor Swift song includes the lyrics, 'I knew you were trouble when you walked in'?", answer: "'I Knew You Were Trouble'" },
+            { question: "In which year did Taylor Swift release her album '1989'?", answer: "2014" },
+            { question: "Which Taylor Swift song won the Grammy Award for Song of the Year in 2010?", answer: "'You Belong with Me'" },
+            { question: "What is the name of Taylor Swift's second studio album?", answer: "'Fearless'" },
+            { question: "Which song from Taylor Swift's 'Lover' album features Brendon Urie of Panic! At the Disco?", answer: "'ME!'" },
+            { question: "Which Taylor Swift song was inspired by her relationship with Jake Gyllenhaal?", answer: "'All Too Well'" },
+            { question: "How many Grammy Awards has Taylor Swift won (as of 2023)?", answer: "12" },
+            { question: "Which Taylor Swift album is her first fully pop album?", answer: "'1989'" },
+            { question: "Who did Taylor Swift collaborate with on the song 'Everything Has Changed'?", answer: "Ed Sheeran" },
+            { question: "What is the name of Taylor Swift's 2020 surprise album?", answer: "'Folklore'" },
+            { question: "Which Taylor Swift song features the lyric, 'We are never ever getting back together'?", answer: "'We Are Never Ever Getting Back Together'" },
+            { question: "Who did Taylor Swift write the song 'Back to December' about?", answer: "Taylor Lautner" },
+            { question: "What is the lead single from Taylor Swift's 'Reputation' album?", answer: "'Look What You Made Me Do'" },
+            { question: "Which song on Taylor Swift's 'Folklore' album features Bon Iver?", answer: "'Exile'" },
+            { question: "What is Taylor Swift's highest-charting single on the Billboard Hot 100?", answer: "'Shake It Off' (peaked at No. 1)" },
+            { question: "Which Taylor Swift song from '1989' features the line, 'Are we out of the woods yet?'?", answer: "'Out of the Woods'" },
+            { question: "Which record label did Taylor Swift sign with in 2018?", answer: "Republic Records" },
+            { question: "Which song did Taylor Swift perform at the 2021 Grammys with Aaron Dessner and Jack Antonoff?", answer: "'Cardigan'" },
+            { question: "In which music video did Taylor Swift play multiple versions of herself?", answer: "'Look What You Made Me Do'" },
+            { question: "Which Taylor Swift album was the first to win Album of the Year at the Grammys?", answer: "'Fearless'" },
+            { question: "What is the name of Taylor Swift's brother?", answer: "Austin Swift" },
+            { question: "Which Taylor Swift album features the song 'Blank Space'?", answer: "'1989'" },
+            { question: "Who did Taylor Swift write the song 'Style' about?", answer: "Harry Styles" },
+            { question: "Which Taylor Swift album includes the song 'Delicate'?", answer: "'Reputation'" },
+            { question: "Which tour did Taylor Swift headline in 2015 to support her '1989' album?", answer: "'The 1989 World Tour'" },
+            { question: "What is the name of Taylor Swift's album that was rerecorded and re-released in 2021?", answer: "'Fearless (Taylor's Version)'" },
+            { question: "Which Taylor Swift song features the lyric, 'I'm just gonna shake, shake, shake, shake, shake'?", answer: "'Shake It Off'" },
+            { question: "Which Taylor Swift song is rumored to be about John Mayer?", answer: "'Dear John'" },
+            { question: "Which music video earned Taylor Swift the MTV Video Music Award for Best Female Video in 2009?", answer: "'You Belong with Me'" },
+            { question: "What song did Taylor Swift release as the lead single from her album 'Red'?", answer: "'We Are Never Ever Getting Back Together'" },
+            { question: "Which Taylor Swift song features the lyrics, 'Romeo, take me somewhere we can be alone'?", answer: "'Love Story'" },
+            { question: "Which Taylor Swift album is associated with the 'Taylor Swift Eras' tour?", answer: "'Midnights'" },
+            { question: "Which song was Taylor Swift's first No. 1 on the Billboard Hot 100?", answer: "'We Are Never Ever Getting Back Together'" },
+            { question: "Who did Taylor Swift collaborate with on 'I Don't Wanna Live Forever'?", answer: "Zayn Malik" },
+            { question: "Which Taylor Swift album was inspired by her shift to a more synth-pop sound?", answer: "'1989'" },
+            { question: "Which song on 'Lover' is about Taylor Swift's current partner?", answer: "'Lover'" },
+            { question: "What is the name of Taylor Swift's self-directed documentary released on Netflix?", answer: "'Miss Americana'" },
+            { question: "What was Taylor Swift's first movie role?", answer: "She played Felicia in 'Valentine's Day' (2010)" },
+            { question: "Which song by Taylor Swift has the lyric, 'This is me trying'?", answer: "'This Is Me Trying'" },
+            { question: "Who did Taylor Swift dedicate the song 'Ronan' to?", answer: "A young boy named Ronan Thompson who died from cancer" },
+            { question: "Which Taylor Swift song features a duet with The Civil Wars?", answer: "'Safe & Sound'" },
+            { question: "Which Taylor Swift song features the lyrics, 'Darling I'm a nightmare dressed like a daydream'?", answer: "'Blank Space'" },
+            { question: "What is Taylor Swift's favorite number?", answer: "13" },
+            { question: "In which song does Taylor Swift sing about a scarf?", answer: "'All Too Well'" },
+            { question: "What is the name of Taylor Swift's second surprise album released in 2020?", answer: "'Evermore'" },
+            { question: "Which Taylor Swift song features a music video where she crashes a wedding?", answer: "'I Write Sins Not Tragedies'" },
+            { question: "What is the name of Taylor Swift's first live album?", answer: "'Speak Now World Tour Live'" },
+            { question: "Which song on 'Red' is about the end of a relationship and longing?", answer: "'All Too Well'" },
+            { question: "Which Taylor Swift music video features her as a high school girl?", answer: "'You Belong With Me'" },
+            { question: "What is Taylor Swift's favorite color?", answer: "Red" },
+            { question: "Which Taylor Swift song was released as part of her 'Red (Taylor's Version)' re-recording?", answer: "'Wildest Dreams (Taylor's Version)'" },
+            { question: "What is the name of the song Taylor Swift wrote for the 2012 movie 'The Lorax'?", answer: "'Safe & Sound'" },
+            { question: "Which album did Taylor Swift release in 2008?", answer: "'Fearless'" },
+            { question: "Which song by Taylor Swift was inspired by her time spent in New York City?", answer: "'Welcome to New York'" },
+            { question: "Which Taylor Swift song was featured on the soundtrack of the film 'The Hunger Games'?", answer: "'Safe & Sound'" },
+            { question: "What song on 'Lover' was inspired by Taylor Swift's relationship with Joe Alwyn?", answer: "'Cornelia Street'" },
+            { question: "What is Taylor Swift's dog's name?", answer: "Meredith Grey and Olivia Benson" },
+            { question: "Which song did Taylor Swift perform at the 2016 Super Bowl 50 Halftime Show?", answer: "'Bad Blood'" },
+            { question: "Which Taylor Swift song includes the lyrics, 'And I know we’re in the middle of the night'?", answer: "'You Need to Calm Down'" },
+            { question: "What song on 'Folklore' features the lyrics, 'I think I've been in love with you'?", answer: "'Invisible String'" },
+            { question: "What is Taylor Swift's favorite holiday?", answer: "Christmas" },
+            { question: "Which Taylor Swift song was released as a single in 2011 and became a hit on country and pop charts?", answer: "'Ours'" },
+            { question: "Which Taylor Swift album features the song 'The Archer'?", answer: "'Lover'" },
+            { question: "What is the name of Taylor Swift's autobiographical book released in 2010?", answer: "'Taylor Swift: The Story of Me'" },
+            { question: "Which song on 'Reputation' features the lyrics, 'I don't trust nobody and nobody trusts me'?", answer: "'End Game'" },
+            { question: "What song on 'Speak Now' is a duet with country artist John Mayer?", answer: "'Dear John'" },
+            { question: "Which Taylor Swift album features the song 'Red'?", answer: "'Red'" },
+            { question: "Who was Taylor Swift's opening act on 'The 1989 World Tour'?", answer: "Vance Joy" },
+            { question: "Which Taylor Swift song was inspired by her experience with a breakup?", answer: "'Back to December'" },
+            { question: "Which music video by Taylor Swift features a high fashion runway setting?", answer: "'The Man'" },
+            { question: "What is Taylor Swift's zodiac sign?", answer: "Sagittarius" },
+            { question: "Which Taylor Swift song features the lyric, 'I'm shining like fireworks over your sad, empty town'?", answer: "'Dear John'" },
+            { question: "Which Taylor Swift album was released in 2017?", answer: "'Reputation'" },
+            { question: "Which Taylor Swift song was written for the 'Cats' movie soundtrack?", answer: "'Beautiful Ghosts'" },
+            { question: "Which Taylor Swift music video features a scene in a laundromat?", answer: "'Blank Space'" },
+            { question: "Which Taylor Swift song features the lyric, 'I’m a crumpled up piece of paper lying here'?", answer: "'All Too Well'" },
+            { question: "What is Taylor Swift's favorite ice cream flavor?", answer: "Chocolate Chip Cookie Dough" },
+            { question: "Which song on 'Red' is a collaboration with rapper Ed Sheeran?", answer: "'Everything Has Changed'" },
+            { question: "Which Taylor Swift album includes the song '22'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song features the lyrics, 'You were the best of times, the worst of crimes'?", answer: "'The Last Time'" },
+            { question: "What was the first single released from Taylor Swift's 'Speak Now' album?", answer: "'Mine'" },
+            { question: "Which song on 'Fearless' was inspired by Taylor Swift's experiences in her teenage years?", answer: "'Fifteen'" },
+            { question: "Which music video features Taylor Swift playing a character named 'Ariel'?", answer: "'Blank Space'" },
+            { question: "Which Taylor Swift album was her first to go platinum?", answer: "'Taylor Swift'" },
+            { question: "What song on 'Speak Now' is known for its emotional lyrics about a broken relationship?", answer: "'Back to December'" },
+            { question: "Which song by Taylor Swift was inspired by her own high school experiences?", answer: "'You Belong with Me'" },
+            { question: "Which Taylor Swift song was featured on the soundtrack for the movie 'The Lorax'?", answer: "'Safe & Sound'" },
+            { question: "What is the name of Taylor Swift's song that references a historic love affair?", answer: "'Love Story'" },
+            { question: "Which Taylor Swift album features the song 'Cardigan'?", answer: "'Folklore'" },
+            { question: "Which Taylor Swift song was inspired by her move to New York City?", answer: "'Welcome to New York'" },
+            { question: "What is Taylor Swift's favorite song to perform live?", answer: "This varies, but often 'Love Story'" },
+            { question: "Which song did Taylor Swift perform as a tribute to her grandmother during her 'Speak Now' tour?", answer: "'Mean'" },
+            { question: "Which Taylor Swift album features the song 'Gorgeous'?", answer: "'Reputation'" },
+            { question: "Which Taylor Swift album includes the song 'The Way I Loved You'?", answer: "'Fearless'" },
+            { question: "What song on 'Red' features lyrics about a tumultuous relationship?", answer: "'I Knew You Were Trouble'" },
+            { question: "Which song by Taylor Swift features the lyric, 'You made a rebel of a careless man's careful daughter'?", answer: "'Love Story'" },
+            { question: "Which Taylor Swift song features a memorable bridge about moving on?", answer: "'All Too Well'" },
+            { question: "What is the name of Taylor Swift's 2021 album?", answer: "'Red (Taylor's Version)'" },
+            { question: "Which Taylor Swift song features the lyric, 'I’m the one who made you leave'?", answer: "'I Knew You Were Trouble'" },
+            { question: "Which song on 'Speak Now' is about feeling overlooked and undervalued?", answer: "'Dear John'" },
+            { question: "Which Taylor Swift album includes the song 'The Lucky One'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song features the lyric, 'And I don't know why, but with you I'd dance in a storm in my best dress'?", answer: "'Fearless'" },
+            { question: "Which Taylor Swift album features the song 'The Best Day'?", answer: "'Fearless'" },
+            { question: "Which song on 'Lover' is a duet with country singer Dixie Chicks?", answer: "'Soon You'll Get Better'" },
+            { question: "What song by Taylor Swift is known for its 'Big Reputation' lyric?", answer: "'End Game'" },
+            { question: "What is the name of Taylor Swift's 2012 album?", answer: "'Red'" },
+            { question: "Which Taylor Swift song was inspired by her experiences with fame?", answer: "'The Way I Loved You'" },
+            { question: "Which Taylor Swift album features the song 'Come Back... Be Here'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song features the lyric, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which Taylor Swift song is about her struggle with media scrutiny?", answer: "'Look What You Made Me Do'" },
+            { question: "Which Taylor Swift album features the song 'Begin Again'?", answer: "'Red'" },
+            { question: "Which song by Taylor Swift is known for the lyric, 'I don’t wanna live forever'?", answer: "'I Don't Wanna Live Forever'" },
+            { question: "Which Taylor Swift album includes the song 'All You Had to Do Was Stay'?", answer: "'1989'" },
+            { question: "What is the name of Taylor Swift's song that features a memorable piano melody?", answer: "'Back to December'" },
+            { question: "Which Taylor Swift song features the lyrics, 'I remember how we felt sitting by the water'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song was inspired by her 2016 relationship with Tom Hiddleston?", answer: "'Getaway Car'" },
+            { question: "What is Taylor Swift's favorite book series?", answer: "Harry Potter" },
+            { question: "Which Taylor Swift song features the lyric, 'So I sneak out to the garden to see you'?", answer: "'Love Story'" },
+            { question: "What song on 'Red' features a collaboration with Swedish DJ Avicii?", answer: "'I Wish You Would'" },
+            { question: "Which Taylor Swift song includes the lyrics, 'Cause the players gonna play, play, play, play, play'?", answer: "'Shake It Off'" },
+            { question: "Which Taylor Swift album features the song 'New Romantics'?", answer: "'1989'" },
+            { question: "Which Taylor Swift song is known for its 'dancing with our hands tied' lyric?", answer: "'Dancing with Our Hands Tied'" },
+            { question: "Which song on 'Folklore' was inspired by Taylor Swift's friends?", answer: "'Invisible String'" },
+            { question: "Which Taylor Swift album includes the song 'Dress'?", answer: "'Reputation'" },
+            { question: "Which Taylor Swift song was inspired by her time spent at home during the pandemic?", answer: "'Exile'" },
+            { question: "Which Taylor Swift album includes the song 'The Last Time'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song is known for its 'I can see you standing honey with his arms around your body' lyric?", answer: "'All Too Well'" },
+            { question: "What is the name of Taylor Swift's 2008 album?", answer: "'Fearless'" },
+            { question: "Which Taylor Swift song features the lyric, 'I had the time of my life fighting dragons with you'?", answer: "'Long Live'" },
+            { question: "Which Taylor Swift album features the song 'This Is Why We Can’t Have Nice Things'?", answer: "'Reputation'" },
+            { question: "Which song by Taylor Swift features the lyrics, 'And I don’t know why I’m just a sucker for pain'?", answer: "'I Forgot That You Existed'" },
+            { question: "Which song on 'Lover' features the lyric, 'I think he knows his hands around a cold glass'?", answer: "'Cornelia Street'" },
+            { question: "What song by Taylor Swift was inspired by a bad breakup?", answer: "'Back to December'" },
+            { question: "Which Taylor Swift song features the lyric, 'And the lights are bright, but they're brighter with you'?", answer: "'The Story of Us'" },
+            { question: "Which Taylor Swift album features the song 'Begin Again'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song was inspired by her experience with the media?", answer: "'Look What You Made Me Do'" },
+            { question: "Which Taylor Swift album includes the song 'State of Grace'?", answer: "'Red'" },
+            { question: "What is Taylor Swift's middle name?", answer: "Alison" },
+            { question: "Which song by Taylor Swift features the lyrics, 'And I don't know why, but with you I'd dance in a storm in my best dress'?", answer: "'Fearless'" },
+            { question: "Which Taylor Swift song features the lyric, 'You’re the only one of you'?", answer: "'Lover'" },
+            { question: "What song did Taylor Swift release as a single in 2013?", answer: "'I Knew You Were Trouble'" },
+            { question: "Which Taylor Swift album features the song 'New Romantics'?", answer: "'1989'" },
+            { question: "Which Taylor Swift song features the lyric, 'Cause the players gonna play, play, play, play, play'?", answer: "'Shake It Off'" },
+            { question: "Which Taylor Swift song features the lyrics, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which song on 'Speak Now' features the lyrics, 'We were in the backseat drunk on something stronger than the drinks in the bar'?", answer: "'Last Kiss'" },
+            { question: "Which Taylor Swift album features the song 'The Story of Us'?", answer: "'Speak Now'" },
+            { question: "Which Taylor Swift song is known for the lyrics, 'I'm standing in a crowded room and we're not speaking'?", answer: "'Back to December'" },
+            { question: "What song did Taylor Swift write about her relationship with Calvin Harris?", answer: "'I Wish You Would'" },
+            { question: "Which Taylor Swift song features the lyric, 'I remember how we felt sitting by the water'?", answer: "'Red'" },
+            { question: "What is Taylor Swift's favorite number?", answer: "13" },
+            { question: "Which Taylor Swift song features the lyrics, 'I'm a crumpled up piece of paper lying here'?", answer: "'All Too Well'" },
+            { question: "What is the name of Taylor Swift's 2019 album?", answer: "'Lover'" },
+            { question: "Which song on 'Red' is a duet with Ed Sheeran?", answer: "'Everything Has Changed'" },
+            { question: "Which Taylor Swift album features the song 'I Wish You Would'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song features the lyric, 'And I don’t know why I’m just a sucker for pain'?", answer: "'I Forgot That You Existed'" },
+            { question: "Which song on 'Red' features the lyrics, 'We were never ever getting back together'?", answer: "'We Are Never Ever Getting Back Together'" },
+            { question: "What song on 'Lover' features a duet with country artist Dixie Chicks?", answer: "'Soon You'll Get Better'" },
+            { question: "Which song by Taylor Swift features the lyric, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "What song by Taylor Swift is about a breakup?", answer: "'Back to December'" },
+            { question: "Which Taylor Swift album features the song 'This Is Why We Can’t Have Nice Things'?", answer: "'Reputation'" },
+            { question: "Which song on '1989' features the lyric, 'And I’m the only one who’s been falling down'?", answer: "'Out of the Woods'" },
+            { question: "Which Taylor Swift song was inspired by her 2015 relationship with Calvin Harris?", answer: "'I Wish You Would'" },
+            { question: "Which song by Taylor Swift features the lyric, 'You were the best of times, the worst of crimes'?", answer: "'The Last Time'" },
+            { question: "Which Taylor Swift album includes the song 'Holy Ground'?", answer: "'Red'" },
+            { question: "What song by Taylor Swift features the lyrics, 'I had the time of my life fighting dragons with you'?", answer: "'Long Live'" },
+            { question: "Which Taylor Swift song features the lyric, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which song by Taylor Swift features the lyrics, 'And I know we’re in the middle of the night'?", answer: "'You Need to Calm Down'" },
+            { question: "Which Taylor Swift song features the lyric, 'And I’m the only one who’s been falling down'?", answer: "'Out of the Woods'" },
+            { question: "What is the name of Taylor Swift's 2021 album?", answer: "'Red (Taylor's Version)'" },
+            { question: "Which song on 'Speak Now' features the lyrics, 'We were in the backseat drunk on something stronger than the drinks in the bar'?", answer: "'Last Kiss'" },
+            { question: "Which Taylor Swift song features the lyric, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which Taylor Swift album includes the song 'I Wish You Would'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song was inspired by her relationship with Harry Styles?", answer: "'Style'" },
+            { question: "Which song on '1989' features the lyric, 'And I’m the only one who’s been falling down'?", answer: "'Out of the Woods'" },
+            { question: "Which Taylor Swift song features the lyric, 'And I don’t know why I’m just a sucker for pain'?", answer: "'I Forgot That You Existed'" },
+            { question: "Which Taylor Swift album features the song 'All Too Well'?", answer: "'Red'" },
+            { question: "Which Taylor Swift album includes the song 'I Wish You Would'?", answer: "'Red'" },
+            { question: "Which Taylor Swift song features the lyrics, 'And I don’t know why I’m just a sucker for pain'?", answer: "'I Forgot That You Existed'" },
+            { question: "Which song by Taylor Swift features the lyric, 'You’re the only one of you'?", answer: "'Lover'" },
+            { question: "Which Taylor Swift album features the song 'Blank Space'?", answer: "'1989'" },
+            { question: "What song by Taylor Swift features the lyrics, 'I’m standing in a crowded room and we’re not speaking'?", answer: "'Back to December'" },
+            { question: "Which Taylor Swift song features the lyrics, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which Taylor Swift album features the song 'I Wish You Would'?", answer: "'Red'" },
+            { question: "What is Taylor Swift's favorite ice cream flavor?", answer: "Chocolate Chip Cookie Dough" },
+            { question: "Which song on 'Lover' is a duet with country artist Dixie Chicks?", answer: "'Soon You'll Get Better'" },
+            { question: "Which Taylor Swift album includes the song 'All Too Well'?", answer: "'Red'" },
+            { question: "Which song on '1989' features the lyric, 'And I’m the only one who’s been falling down'?", answer: "'Out of the Woods'" },
+            { question: "Which Taylor Swift song was inspired by her 2015 relationship with Calvin Harris?", answer: "'I Wish You Would'" },
+            { question: "Which song by Taylor Swift features the lyrics, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which Taylor Swift album includes the song 'Holy Ground'?", answer: "'Red'" },
+            { question: "Which song by Taylor Swift features the lyrics, 'I had the time of my life fighting dragons with you'?", answer: "'Long Live'" },
+            { question: "Which Taylor Swift song features the lyric, 'And darling I will be loving you 'til we're 70'?", answer: "'Lover'" },
+            { question: "Which song by Taylor Swift features the lyric, 'I remember how we felt sitting by the water'?", answer: "'Red'" }
+        ];
+    }
+
+    getRandomQuestion() {
+        const randomIndex = Math.floor(Math.random() * this.questions.length);
+        return this.questions[randomIndex];
+    }
+}
+
+const game = new TaylorSwiftTrivia();
+const question = game.getRandomQuestion();
+
+console.log(`Question: ${question.question}`);
+console.log(`Answer: ${question.answer}`);
